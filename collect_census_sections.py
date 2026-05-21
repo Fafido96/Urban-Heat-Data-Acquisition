@@ -21,14 +21,11 @@ url = (
     "&request=GetFeature"
     "&typeNames=WFS_INE_SECCIONES_G01:Secciones2021"
     "&outputFormat=GEOJSON"
+    "&cql_filter=CLAU2='12040'"  # Hopefully this additional filter will let me get the finer grained census sections.
 )
 
-
 # Load census sections from WFS
-gdf = gpd.read_file(url)
-
-# Filter Castellón Municipality
-gdf_castello = gdf[gdf["CLAU2"] == "12040"]
+gdf_castello = gpd.read_file(url)
 
 #check filtered gdf
 print (gdf_castello.head(10).T)
