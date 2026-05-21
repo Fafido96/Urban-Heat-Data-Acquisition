@@ -1,35 +1,39 @@
 import geopandas as gpd
+#import requests
 
 from owslib.wfs import WebFeatureService
 
-#Check the correct layers
+#Check the correct layer name
 
-url = "https://servicios.ine.es/arcgis/services/WFS_INE_SECCIONES_G01/MapServer/WFSServer"
+#url = "https://servicios.ine.es/arcgis/services/WFS_INE_SECCIONES_G01/MapServer/WFSServer"
 
-wfs = WebFeatureService(url=url, version='2.0.0')
+#wfs = WebFeatureService(url=url, version='2.0.0')
 
-print(list(wfs.contents))
+#print(list(wfs.contents))
 
 
 #WFS request URL
-#url = (
-#    "https://servicios.ine.es/arcgis/services/"
-#    "WFS_INE_SECCIONES_G01/MapServer/WFSServer?"
- #   "service=WFS"
-  #  "&version=2.0.0"
-   # "&request=GetFeature"
-    #"&typeName=0"
-    #"&outputFormat=application/json"
-#)
+url = (
+    "https://servicios.ine.es/arcgis/services/"
+    "WFS_INE_SECCIONES_G01/MapServer/WFSServer?"
+    "service=WFS"
+    "&version=2.0.0"
+    "&request=GetFeature"
+    "&typeNames=WFS_INE_SECCIONES_G01:Distritos2021"
+    "&outputFormat=GEOJSON"
+)
+
+##response = requests.get(url)
 
 # Load census sections from WFS
-#gdf = gpd.read_file(url)
+gdf = gpd.read_file(url)
 
 # Check columns
-#print(gdf.columns)
+print(gdf.columns)
+print (gdf.head(10).T)
 
-# Filter Castellón province
-#gdf = gdf[gdf["CPRO"] == "12"]
+# Filter Castellón Municipality
+#gdf_castello = gdf[gdf["CMUN"] == "12"]
 
 # Convert CRS to WGS84 for web maps / GeoJSON
 #gdf = gdf.to_crs(4326)
