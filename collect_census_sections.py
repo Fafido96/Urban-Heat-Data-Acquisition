@@ -1,7 +1,7 @@
 import geopandas as gpd
-#import requests
-
 from owslib.wfs import WebFeatureService
+import os
+
 
 #Check the correct layer name
 
@@ -19,29 +19,25 @@ url = (
     "service=WFS"
     "&version=2.0.0"
     "&request=GetFeature"
-    "&typeNames=WFS_INE_SECCIONES_G01:Distritos2021"
+    "&typeNames=WFS_INE_SECCIONES_G01:Secciones2021"
     "&outputFormat=GEOJSON"
 )
 
-##response = requests.get(url)
 
 # Load census sections from WFS
 gdf = gpd.read_file(url)
 
-# Check columns
-print(gdf.columns)
-print (gdf.head(10).T)
-
 # Filter Castellón Municipality
-#gdf_castello = gdf[gdf["CMUN"] == "12"]
+gdf_castello = gdf[gdf["CLAU2"] == "12040"]
+
+#check filtered gdf
+print (gdf_castello.head(10).T)
 
 # Convert CRS to WGS84 for web maps / GeoJSON
-#gdf = gdf.to_crs(4326)
+gdf_castello = gdf_castello.to_crs(4326)
 
 # Save locally as GeoJSON
-#gdf.to_file(
- #   "castellon_census_sections.geojson",
-#    driver="GeoJSON"
-#)
-
-#print(gdf.head())
+output_folder = "/mnt/c/Users/HP/Documents/Academics/Munster/Courses/Spatial Justice and Support Decision Systems/Practicals/Final Project/Data Acquisition/outputs"
+output_file = os.path.join(output_folder, "castellon_sections.geojson")
+gdf_castello.to_file(output_file, driver="GeoJSON")
+print(f"Successfully saved to: {output_file}")
